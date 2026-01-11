@@ -86,10 +86,45 @@
   </main>
 
   <footer class="footer">
-    <p>胡學慈 隊長作品 | 致力落實 SDG 永續發展目標</p>
-  </footer>
+   </footer>
 
+  <!-- 原本就有的外部 JS（先保留） -->
   <script src="./js/common.js"></script>
   <script src="./js/survey.js"></script>
+
+  <!-- ✅ 保險綁定：就算外部 JS 沒綁到，按鈕也一定會動 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("btnAnalyze");
+      if (!btn) {
+        alert("找不到按鈕 btnAnalyze（請確認 HTML 的 id 是否正確）");
+        return;
+      }
+
+      btn.addEventListener("click", () => {
+        const data = {
+          interest: document.getElementById("q_interest")?.value,
+          skill: document.getElementById("q_skill")?.value,
+          phys: document.getElementById("q_phys")?.value,
+          time: document.getElementById("q_time")?.value,
+          tech: document.getElementById("q_tech")?.value,
+        };
+
+        // 有任何欄位抓不到就提示（避免你按了沒反應）
+        for (const [k, v] of Object.entries(data)) {
+          if (v == null) {
+            alert("問卷欄位 id 抓不到：" + k + "（請確認 survey.html 的 select id）");
+            return;
+          }
+        }
+
+        // 存進 localStorage，result.html 用這個 key 去讀
+        localStorage.setItem("silverSurvey", JSON.stringify(data));
+
+        // 跳到結果頁
+        window.location.href = "result.html";
+      });
+    });
+  </script>
 </body>
 </html>
